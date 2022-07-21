@@ -65,8 +65,8 @@ function getStringFromTemplate(f, l) {
  *   'Hello, John Doe!' => 'John Doe'
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
-function extractNameFromTemplate(/* value */) {
-  throw new Error('Not implemented');
+function extractNameFromTemplate(s) {
+  return s.split('Hello, ').split('!')[0];
 }
 
 
