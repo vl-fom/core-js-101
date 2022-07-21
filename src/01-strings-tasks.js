@@ -66,7 +66,7 @@ function getStringFromTemplate(f, l) {
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
 function extractNameFromTemplate(s) {
-  return s.split('Hello, ').split('!')[0];
+  return s.slice(7, -1);
 }
 
 
@@ -80,8 +80,8 @@ function extractNameFromTemplate(s) {
  *   'John Doe'  => 'J'
  *   'cat'       => 'c'
  */
-function getFirstChar(/* value */) {
-  throw new Error('Not implemented');
+function getFirstChar(s) {
+  return s[0];
 }
 
 /**
