@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -34,8 +34,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 
@@ -53,8 +53,15 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const y = date.getFullYear();
+  if (y % 4 !== 0) {
+    return false;
+  }
+  if (y % 100 === 0 && y % 1000 !== 0) {
+    return false;
+  }
+  return true;
 }
 
 
@@ -73,17 +80,25 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  let ms = endDate.valueOf() - startDate.valueOf();
+  const d = new Date('1998-01-01T00:00:00.000');
+  d.setMilliseconds(ms);
+  if (d.getMilliseconds() < 10) {
+    ms = `00${d.getMilliseconds()}`;
+  }
+  if (d.getMilliseconds() >= 10 && d.getMilliseconds() < 100) {
+    ms = `0${d.getMilliseconds()}`;
+  }
+  if (d.getMilliseconds() > 100) {
+    ms = `${d.getMilliseconds()}`;
+  }
+  return `${d.toString().split(' ')[4]}.${ms}`;
 }
 
 
 /**
  * Returns the angle (in radians) between the hands of an analog clock
- * for the specified Greenwich time.
- * If you have problem with solution please read: https://en.wikipedia.org/wiki/Clock_angle_problem
- *
- * SMALL TIP: convert to radians just once, before return in order to not lost precision
  *
  * @param {date} date
  * @return {number}
@@ -94,8 +109,16 @@ function timeSpanToString(/* startDate, endDate */) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(/* date */) {
-  throw new Error('Not implemented');
+function angleBetweenClockHands(date) {
+  const h = date.getUTCHours();
+  const m = date.getUTCMinutes();
+  const ha = ((h % 12) * Math.PI) / 6 + (m * Math.PI) / 360;
+  const ma = (m * Math.PI) / 30;
+  const a = Math.abs(ma - ha);
+  if (a > Math.PI) {
+    return Math.PI * 2 - a;
+  }
+  return a;
 }
 
 
