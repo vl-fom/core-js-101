@@ -95,8 +95,8 @@ function getFirstChar(s) {
  *   'cat'              => 'cat'
  *   '\tHello, World! ' => 'Hello, World!'
  */
-function removeLeadingAndTrailingWhitespaces(/* value */) {
-  throw new Error('Not implemented');
+function removeLeadingAndTrailingWhitespaces(str) {
+  return str.trim();
 }
 
 /**
@@ -227,8 +227,24 @@ function getRectangleString(width, height) {
  *
  */
 function encodeToRot13(str) {
-  return str;
-  // throw new Error('Not implemented');
+  return String.fromCharCode(...(str.split('').map((el) => el.charCodeAt()).map((el) => {
+    if (el < 65 || (el > 90 && el < 97) || el > 122) {
+      return el;
+    }
+    if (el > 64 && el < 91) {
+      // return ((el + 13) % 65);
+      let a = ((el + 13) % 91);
+      if (a < 65) {
+        a += 65;
+      }
+      return a;
+    }
+    let a = ((el + 13) % 123);
+    if (a < 97) {
+      a += 97;
+    }
+    return a;
+  })));
 }
 
 /**
@@ -245,8 +261,8 @@ function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-  if ((typeof value) !== 'string') return false;
-  return value.toString() === value;
+  if (((typeof value) !== 'string' && (typeof value) !== 'object') || value === null) return false;
+  return (typeof value.valueOf()) === 'string';
 }
 
 
@@ -274,8 +290,40 @@ function isString(value) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  let suit;
+  let num;
+  switch (value.slice(0, -1)) {
+    case 'A':
+      suit = 0;
+      break;
+    case 'J':
+      suit = 10;
+      break;
+    case 'Q':
+      suit = 11;
+      break;
+    case 'K':
+      suit = 12;
+      break;
+    default: suit = parseInt(value.slice(0, -1), 10) - 1;
+  }
+  switch (value.slice(-1)) {
+    case '♣':
+      num = 0;
+      break;
+    case '♦':
+      num = 1;
+      break;
+    case '♥':
+      num = 2;
+      break;
+    case '♠':
+      num = 3;
+      break;
+    default: num = 1;
+  }
+  return suit + 13 * num;
 }
 
 
