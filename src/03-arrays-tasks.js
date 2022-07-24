@@ -549,8 +549,11 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(arr, keySelector, valueSelector) {
+  const keySet = new Map();
+  arr.reduce((a, el) => a.set(keySelector(el), []), keySet);
+  arr.map((el) => keySet.get(keySelector(el)).push(valueSelector(el)));
+  return keySet;
 }
 
 
