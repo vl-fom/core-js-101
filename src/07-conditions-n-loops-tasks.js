@@ -293,7 +293,7 @@ function getDigitalRoot(num) {
   if (num < 10) {
     return num;
   }
-  const s = (num + '').split('').reduce((a, b) => a + parseInt(b, 10), 0);
+  const s = (`${num}`).split('').reduce((a, b) => a + parseInt(b, 10), 0);
   return getDigitalRoot(s);
 }
 
