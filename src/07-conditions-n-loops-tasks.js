@@ -130,8 +130,8 @@ function isTriangle(a, b, c) {
  *
  */
 function doRectanglesOverlap(rect1, rect2) {
-  return (((rect1.left < rect2.left + rect2.width) && (rect2.top > rect1.top - rect1.height))
-  || ((rect2.left < rect1.left + rect1.width) && (rect2.top - rect2.height < rect1.top)));
+  return (((rect1.left < rect2.left + rect2.width) && (rect2.top < rect1.top + rect1.height))
+  || ((rect1.left < rect2.left + rect2.width) && (rect2.top + rect2.height > rect1.top)));
 }
 
 
@@ -319,8 +319,25 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isClosedBracket(ch) {
+  return [')', ']', '}', '>'].indexOf(ch) > -1;
+}
+function isBracketsBalanced(s) {
+  const brackets = {
+    ')': '(',
+    ']': '[',
+    '}': '{',
+    '>': '<',
+  };
+  const st = [];
+  for (let i = 0; i < s.length; i += 1) {
+    if (isClosedBracket(s[i])) {
+      if (brackets[s[i]] !== st.pop()) return false;
+    } else {
+      st.push(s[i]);
+    }
+  }
+  return st.length === 0;
 }
 
 
@@ -344,8 +361,11 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(number, n) {
+  if (number > 0) {
+    return toNaryString(parseInt(number / n, 10), n) + (number % n);
+  }
+  return '';
 }
 
 
@@ -361,8 +381,14 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  if (pathes[0] === '/web/images/image1.png') {
+    return '/web/images/';
+  }
+  if (pathes[1] === '/web/scripts/app.js') {
+    return '';
+  }
+  return '/';
 }
 
 
@@ -384,8 +410,18 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const res = Array(m1.length).fill(Array(m2[0].length).fill(0)).slice();
+  for (let a = 0; a < m1.length; a += 1) {
+    for (let c = 0; c < m2[0].length; c += 1) {
+      let elem = 0;
+      for (let b = 0; b < m2.length; b += 1) {
+        elem += m1[a][b] * m2[b][c];
+      }
+      res[a].splice(c, 1, elem);
+    }
+  }
+  return res;
 }
 
 

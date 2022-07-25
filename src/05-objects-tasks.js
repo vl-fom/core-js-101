@@ -111,41 +111,138 @@ function fromJSON(proto, json) {
  *
  *  For more examples see unit tests.
  */
-const SelectorBuilder = {};
+class SelectorBuilder {
+  constructor() {
+    this.cl = '';
+    this.at = '';
+    this.pc = '';
+  }
+
+  element(value) {
+    if (this.el) {
+      throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+    } else if (this.i) {
+      throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    } else {
+      this.el = `${value}`;
+      return this;
+    }
+  }
+
+  id(value) {
+    if (this.i) {
+      throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+    } else if (this.cl || this.pe) {
+      throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    } else {
+      this.i = `#${value}`;
+      return this;
+    }
+  }
+
+  class(value) {
+    if (this.at) {
+      throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    } else {
+      this.cl += `.${value}`;
+      return this;
+    }
+  }
+
+  attr(value) {
+    if (this.pc) {
+      throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    } else {
+      this.at += `[${value}]`;
+      return this;
+    }
+  }
+
+  pseudoClass(value) {
+    if (this.pe) {
+      throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    } else {
+      this.pc += `:${value}`;
+      return this;
+    }
+  }
+
+  pseudoElement(value) {
+    if (this.pe) {
+      throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+    } else {
+      this.pe = `::${value}`;
+      return this;
+    }
+  }
+
+  combine(selector1, combinator, selector2) {
+    this.cmb = `${selector1.stringify()} ${combinator} ${selector2.stringify()}`;
+    return this;
+  }
+
+  stringify() {
+    if (this.cmb) {
+      return this.cmb;
+    }
+    return `${this.el || ''}${this.i || ''}${this.cl || ''}${this.at || ''}${this.pc || ''}${this.pe || ''}`;
+  }
+}
 const cssSelectorBuilder = {
   element(value) {
-    // this.elem = value;
-    return new SelectorBuilder().element(value);
+    this.el = `${value}`;
+    const a = new SelectorBuilder();
+
+    // this.sb = a;
+    return a.element(value);
   },
 
   id(value) {
-    // this.elem += `#${value}`;
-    return new SelectorBuilder().id(value);
+    this.i = `#${value}`;
+    const a = new SelectorBuilder();
+
+    // this.sb = a;
+    return a.id(value);
   },
 
   class(value) {
-    // this.elem += `.${value}`;
-    return new SelectorBuilder().class(value);
+    this.cl = `.${value}`;
+    const a = new SelectorBuilder();
+
+    // this.sb = a;
+    return a.class(value);
   },
 
   attr(value) {
-    // this.elem += `[${value}]`;
-    return new SelectorBuilder().attr(value);
+    this.at = `[${value}]`;
+    const a = new SelectorBuilder();
+
+    // this.sb = a;
+    return a.attr(value);
   },
 
   pseudoClass(value) {
-    // this.elem += `:${value}`;
-    return new SelectorBuilder().pseudoClass(value);
+    this.pc = `:${value}`;
+    const a = new SelectorBuilder();
+
+    // this.sb = a;
+    return a.pseudoClass(value);
   },
 
   pseudoElement(value) {
-    // this.elem += `::${value}`;
-    return new SelectorBuilder().pseudoElement(value);
+    this.pe = `::${value}`;
+    const a = new SelectorBuilder();
+
+    // this.sb = a;
+    return a.pseudoElement(value);
   },
 
   combine(selector1, combinator, selector2) {
-    return `${selector1} ${combinator} ${selector2}`;
+    const a = new SelectorBuilder();
+
+    return a.combine(selector1, combinator, selector2);
   },
+
 };
 
 
