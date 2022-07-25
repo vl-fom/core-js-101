@@ -411,7 +411,10 @@ function getCommonDirectoryPath(pathes) {
  *
  */
 function getMatrixProduct(m1, m2) {
-  const res = Array(m1.length).fill(Array(m2[0].length).fill(0)).slice();
+  const aa = Array(m2[0].length).fill(0).map((el, i) => i);
+  const res = Array(m1.length).fill(0)
+    .map(() => aa.slice())
+    .slice();
   for (let a = 0; a < m1.length; a += 1) {
     for (let c = 0; c < m2[0].length; c += 1) {
       let elem = 0;
