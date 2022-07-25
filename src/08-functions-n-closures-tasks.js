@@ -111,12 +111,14 @@ function memoize(fn) {
  * retryer() => 2
  */
 function retry(func, attempts) {
-  let a = 0;
-  if (attempts <= 0) {
-    return a;
-  }
-  a += 1;
-  return retry(func, attempts - 1);
+  return () => {
+    try {
+      func();
+    } catch (e) {
+      return retry(func, attempts - 1)();
+    }
+    return func();
+  };
 }
 
 
