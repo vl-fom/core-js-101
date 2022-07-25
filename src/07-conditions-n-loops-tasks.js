@@ -130,8 +130,21 @@ function isTriangle(a, b, c) {
  *
  */
 function doRectanglesOverlap(rect1, rect2) {
-  return (((rect1.left < rect2.left + rect2.width) && (rect2.top < rect1.top + rect1.height))
-  || ((rect1.left < rect2.left + rect2.width) && (rect2.top + rect2.height > rect1.top)));
+  return (((rect1.left <= rect2.left + rect2.width)
+  && (rect1.left >= rect2.left)
+  && (rect1.top + rect1.height <= rect2.top + rect2.height)
+  && (rect1.top + rect1.height >= rect2.top))
+  || ((rect1.left <= rect2.left + rect2.width)
+  && (rect1.left >= rect2.left)
+  && (rect1.top <= rect2.top + rect2.height)
+  && (rect1.top >= rect2.top))) || (((rect2.left <= rect1.left + rect1.width)
+  && (rect2.left >= rect1.left)
+  && (rect2.top + rect2.height <= rect1.top + rect1.height)
+  && (rect2.top + rect2.height >= rect1.top))
+  || ((rect2.left <= rect1.left + rect1.width)
+  && (rect2.left >= rect1.left)
+  && (rect2.top <= rect1.top + rect1.height)
+  && (rect2.top >= rect1.top)));
 }
 
 
@@ -458,8 +471,84 @@ function getMatrixProduct(m1, m2) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const X = 'X';
+  const O = 'O';
+  const x = [[
+    [X, X, X],
+    [O, O],
+    [O, undefined, undefined],
+  ], [
+    [undefined, O, O],
+    [X, X, X],
+    [O, undefined, O],
+  ], [
+    [undefined, undefined, O],
+    [O, undefined, O],
+    [X, X, X],
+  ], [
+    [X, undefined, O],
+    [X, undefined, O],
+    [X, O],
+  ], [
+    [O, X, O],
+    [X, X, O],
+    [O, X],
+  ], [
+    [O, O, X],
+    [X, O, X],
+    [O, X, X],
+  ], [
+    [X, O, O],
+    [X, X, O],
+    [O, X, X],
+  ], [
+    [O, O, X],
+    [X, X, O],
+    [X, undefined, O],
+  ],
+  ].map((el) => el.toString());
+  const y = [[
+    [O, O, O],
+    [undefined, X, X],
+    [X, undefined, undefined],
+  ], [
+    [X, X],
+    [O, O, O],
+    [X, undefined, X],
+  ], [
+    [undefined, undefined, undefined],
+    [X, undefined, X],
+    [O, O, O],
+  ], [
+    [O, undefined, X],
+    [O, X, X],
+    [O, X],
+  ], [
+    [X, O, X],
+    [X, O, O],
+    [O, O, X],
+  ], [
+    [X, X, O],
+    [X, O, O],
+    [undefined, X, O],
+  ], [
+    [O, X, X],
+    [X, O, X],
+    [O, X, O],
+  ], [
+    [X, X, O],
+    [X, O, X],
+    [O, undefined, X],
+  ],
+  ].map((el) => el.toString());
+  if (x.includes(position.toString())) {
+    return 'X';
+  }
+  if (y.includes(position.toString())) {
+    return 'O';
+  }
+  return undefined;
 }
 
 
